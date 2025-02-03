@@ -51,10 +51,12 @@ function App() {
       <div className="absolute top-0 left-0 w-full h-full bg-white white-section" />
 
       {/* Contenu */}
-      <div className="relative z-10 container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center mb-8 text-white">
-          PokeLille TCG
-        </h1>
+      <div className="relative z-10 container mx-auto px-4 pt-16 pb-8">
+        <div className="season-title shadow-sm">
+          <h1 className="text-gray-600 text-xl font-normal relative z-10">
+            Choisissez une soirée.
+          </h1>
+        </div>
 
         <div
           className={`carousel-container relative ${
