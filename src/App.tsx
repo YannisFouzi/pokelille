@@ -43,9 +43,18 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center mb-8">PokeLille TCG</h1>
+    <div className="min-h-screen relative">
+      {/* Gradient du haut (1/3) */}
+      <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-r from-violet-600 to-green-500" />
+
+      {/* Fond du bas (2/3) */}
+      <div className="absolute bottom-0 left-0 w-full h-2/3 bg-white" />
+
+      {/* Contenu */}
+      <div className="relative z-10 container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold text-center mb-8 text-white">
+          PokeLille TCG
+        </h1>
 
         <div
           className={`carousel-container relative ${
