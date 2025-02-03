@@ -54,8 +54,12 @@ function App() {
                   position === 0
                     ? "z-20 scale-100 opacity-100" // Centre (premier plan)
                     : position === 1
-                    ? "z-10 scale-75 opacity-60 translate-x-[10%] hover:opacity-80" // Droite
-                    : "z-10 scale-75 opacity-60 -translate-x-[110%] hover:opacity-80" // Gauche
+                    ? `z-${
+                        index === currentIndex ? "30" : "10"
+                      } scale-75 opacity-60 translate-x-[10%] hover:opacity-80` // Droite
+                    : `z-${
+                        index === currentIndex ? "30" : "10"
+                      } scale-75 opacity-60 -translate-x-[110%] hover:opacity-80` // Gauche
                 }`}
               >
                 <img
