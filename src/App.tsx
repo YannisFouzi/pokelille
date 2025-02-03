@@ -45,10 +45,10 @@ function App() {
   return (
     <div className="min-h-screen relative">
       {/* Gradient du haut (1/3) */}
-      <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-r from-violet-600 to-green-500" />
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-violet-600 to-green-500 gradient-section" />
 
       {/* Fond du bas (2/3) */}
-      <div className="absolute bottom-0 left-0 w-full h-2/3 bg-white" />
+      <div className="absolute top-0 left-0 w-full h-full bg-white white-section" />
 
       {/* Contenu */}
       <div className="relative z-10 container mx-auto px-4 py-8">
