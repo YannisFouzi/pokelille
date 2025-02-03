@@ -87,11 +87,19 @@ function App() {
                       } hover:opacity-80`
                 }`}
               >
-                <img
-                  src={booster}
-                  alt={`Booster PokeLille ${index + 1}`}
-                  className="w-[300px]"
-                />
+                <div className="relative">
+                  <img
+                    src={booster}
+                    alt={`Booster PokeLille ${index + 1}`}
+                    className="w-[300px] main-image"
+                  />
+                  <img
+                    src={booster}
+                    alt=""
+                    className="w-[300px] reflection"
+                    aria-hidden="true"
+                  />
+                </div>
               </div>
             );
           })}

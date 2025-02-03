@@ -50,7 +50,7 @@
 
 .carousel-container {
   perspective: 1000px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .carousel-item {
@@ -58,12 +58,12 @@
   transition: all 0.5s ease-in-out;
 }
 
-.carousel-item img {
+.carousel-item .main-image {
   transition: all 0.5s ease-in-out;
   animation: levitation 3s ease-in-out infinite;
 }
 
-.carousel-item:hover img {
+.carousel-item:hover .main-image {
   transform: scale(1.05);
 }
 
@@ -116,4 +116,41 @@
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   padding: 1px;
+}
+
+.reflection {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -95%;
+  transform: scaleY(-1);
+  opacity: 0.3;
+  pointer-events: none;
+  animation: reflection-levitation 3s ease-in-out infinite;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 0.2) 70%,
+    rgba(0, 0, 0, 0.5) 85%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 0.2) 70%,
+    rgba(0, 0, 0, 0.5) 85%,
+    rgba(0, 0, 0, 1) 100%
+  );
+}
+
+@keyframes reflection-levitation {
+  0% {
+    transform: scaleY(-1) translateY(0px);
+  }
+  50% {
+    transform: scaleY(-1) translateY(15px);
+  }
+  100% {
+    transform: scaleY(-1) translateY(0px);
+  }
 }
