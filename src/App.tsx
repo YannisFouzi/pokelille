@@ -41,7 +41,7 @@ function App() {
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-center mb-8">PokeLille TCG</h1>
 
-        <div className="carousel-container relative h-[600px] max-w-4xl mx-auto">
+        <div className="carousel-container relative h-[600px] max-w-3xl mx-auto">
           {boosters.map((booster, index) => {
             let position = index - currentIndex;
             if (position < 0) position += boosters.length;
@@ -54,8 +54,8 @@ function App() {
                   position === 0
                     ? "z-20 scale-100 opacity-100" // Centre (premier plan)
                     : position === 1
-                    ? "z-10 scale-75 opacity-60 translate-x-[50%] hover:opacity-80" // Droite
-                    : "z-10 scale-75 opacity-60 -translate-x-[150%] hover:opacity-80" // Gauche
+                    ? "z-10 scale-75 opacity-60 translate-x-[10%] hover:opacity-80" // Droite
+                    : "z-10 scale-75 opacity-60 -translate-x-[110%] hover:opacity-80" // Gauche
                 }`}
               >
                 <img
@@ -66,19 +66,6 @@ function App() {
               </div>
             );
           })}
-
-          <button
-            onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 text-white p-4 rounded-l-lg"
-          >
-            ←
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 text-white p-4 rounded-r-lg"
-          >
-            →
-          </button>
         </div>
       </div>
     </div>
