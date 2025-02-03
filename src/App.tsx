@@ -65,7 +65,7 @@ function App() {
                 <img
                   src={booster}
                   alt={`Booster PokeLille ${index + 1}`}
-                  className="w-[300px] rounded-lg shadow-lg"
+                  className="w-[300px]"
                 />
               </div>
             );
