@@ -57,6 +57,11 @@ function App() {
     }, 1000);
   };
 
+  const handleTitleClick = () => {
+    // Simule le clic sur l'image centrale
+    handleImageClick(currentIndex);
+  };
+
   return (
     <div className="min-h-screen relative">
       {/* Gradient du haut (1/3) */}
@@ -69,6 +74,7 @@ function App() {
       <div className="relative z-10 container mx-auto px-4 pt-16 pb-8">
         <div
           className={`season-title shadow-sm ${isExpanded ? "selected" : ""}`}
+          onClick={handleTitleClick}
         >
           <h1 className="text-gray-600 text-xl font-normal relative z-10">
             {isExpanded ? "Choisir celle-ci" : "Choisissez une soirée."}
