@@ -67,9 +67,11 @@ function App() {
 
       {/* Contenu */}
       <div className="relative z-10 container mx-auto px-4 pt-16 pb-8">
-        <div className="season-title shadow-sm">
+        <div
+          className={`season-title shadow-sm ${isExpanded ? "selected" : ""}`}
+        >
           <h1 className="text-gray-600 text-xl font-normal relative z-10">
-            Choisissez une soirée.
+            {isExpanded ? "Choisir celle-ci" : "Choisissez une soirée."}
           </h1>
         </div>
 
