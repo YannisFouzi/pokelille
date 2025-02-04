@@ -4,6 +4,7 @@ import "./App.css";
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isTearing, setIsTearing] = useState(false);
   const boosters = [
     "/image/booster/pokelillev7.png",
     "/image/booster/pokelillev7.png",
@@ -28,7 +29,13 @@ function App() {
 
     // Si on clique sur l'image centrale
     if (diff === 0) {
-      setIsExpanded(!isExpanded);
+      if (isExpanded) {
+        // Si l'image est déjà agrandie, on déclenche l'animation de déchirement
+        setIsTearing(true);
+      } else {
+        // Sinon, on agrandit simplement l'image
+        setIsExpanded(true);
+      }
       return;
     }
 
@@ -40,6 +47,14 @@ function App() {
         prevSlide();
       }
     }
+  };
+
+  const handleTearEnd = () => {
+    // Après l'animation, on peut faire apparaître le contenu du booster
+    setTimeout(() => {
+      setIsTearing(false);
+      // Ici vous pourrez ajouter la logique pour afficher les cartes
+    }, 1000);
   };
 
   return (
@@ -88,17 +103,56 @@ function App() {
                 }`}
               >
                 <div className="relative">
-                  <img
-                    src={booster}
-                    alt={`Booster PokeLille ${index + 1}`}
-                    className="w-[300px] main-image"
-                  />
-                  <img
-                    src={booster}
-                    alt=""
-                    className="w-[300px] reflection"
-                    aria-hidden="true"
-                  />
+                  {position === 0 ? (
+                    <div
+                      className={`${isTearing ? "tearing" : ""}`}
+                      onAnimationEnd={handleTearEnd}
+                    >
+                      <img
+                        src={booster}
+                        alt={`Booster PokeLille ${index + 1}`}
+                        className={`w-[300px] main-image`}
+                      />
+                      {isTearing && (
+                        <>
+                          <div
+                            className="booster-top"
+                            style={{
+                              backgroundImage: `url(${booster})`,
+                            }}
+                          />
+                          <div className="torn-foil" />
+                          <div
+                            className="booster-bottom"
+                            style={{
+                              backgroundImage: `url(${booster})`,
+                            }}
+                          />
+                          <div className="tear-particles" />
+                        </>
+                      )}
+                      <img
+                        src={booster}
+                        alt=""
+                        className={`w-[300px] reflection`}
+                        aria-hidden="true"
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <img
+                        src={booster}
+                        alt={`Booster PokeLille ${index + 1}`}
+                        className="w-[300px] main-image"
+                      />
+                      <img
+                        src={booster}
+                        alt=""
+                        className="w-[300px] reflection"
+                        aria-hidden="true"
+                      />
+                    </>
+                  )}
                 </div>
               </div>
             );

@@ -155,3 +155,166 @@
     transform: scaleY(-1) perspective(1000px) rotateY(-15deg) translateY(0px);
   }
 }
+
+.booster-wrapper {
+  position: absolute;
+  width: 300px;
+  height: 500px;
+  transform: translate(-50%, -50%);
+  perspective: 1200px;
+  background-color: transparent;
+}
+
+.booster-top {
+  top: 0;
+  transform-origin: left top;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+  clip-path: polygon(0 0, 100% 0, 100% 20%, 0 20%);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.booster-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  clip-path: polygon(0 20%, 100% 20%, 100% 100%, 0 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tear-line {
+  display: none;
+}
+
+.tearing .booster-top {
+  opacity: 1;
+  animation: progressiveTear 0.8s cubic-bezier(0.37, 0.01, 0.74, 0.77) forwards;
+}
+
+@keyframes progressiveTear {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 20%, 0 20%);
+    transform: rotate3d(0, 0, 0, 0deg) translateX(0);
+  }
+  30% {
+    clip-path: polygon(0 0, 100% 0, 100% 20%, 70% 20%, 0 15%);
+    transform: rotate3d(-1, 3, 1, 20deg) translateX(20%);
+  }
+  60% {
+    clip-path: polygon(0 0, 100% 0, 100% 20%, 40% 15%, 0 10%);
+    transform: rotate3d(-1, 4, 1, 35deg) translateX(100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 20%, 20% 10%, 0 5%);
+    transform: rotate3d(-1, 5, 1, 45deg) translateX(180%);
+    opacity: 0;
+  }
+}
+
+.tearing .booster-bottom {
+  opacity: 1;
+}
+
+.tearing .main-image,
+.tearing .reflection {
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.tear-particles {
+  display: none;
+}
+
+.tear-particles::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.8) 0%,
+    transparent 70%
+  );
+  animation: particleAnimation 0.5s linear forwards;
+}
+
+@keyframes particleAnimation {
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.torn-foil {
+  position: absolute;
+  top: calc(20% - 20px);
+  left: 50%;
+  width: 92%;
+  transform: translateX(-50%);
+  height: 20px;
+  background: linear-gradient(
+    to bottom,
+    rgba(230, 240, 255, 1),
+    rgba(200, 220, 240, 1)
+  );
+  clip-path: polygon(
+    0% 100%,
+    5% 70%,
+    15% 65%,
+    25% 75%,
+    35% 60%,
+    45% 70%,
+    55% 65%,
+    65% 75%,
+    75% 60%,
+    85% 70%,
+    90% 65%,
+    100% 100%
+  );
+  opacity: 0;
+  z-index: 10;
+  filter: drop-shadow(0 -1px 1px rgba(0, 0, 0, 0.15));
+  transform-origin: top;
+}
+
+.torn-foil::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  transform: scaleY(-1);
+}
+
+.tearing .torn-foil {
+  animation: showFoil 0.2s ease-out forwards;
+}
+
+@keyframes showFoil {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
