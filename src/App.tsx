@@ -13,6 +13,15 @@ function App() {
   const [isCardLeaving, setIsCardLeaving] = useState(false);
   const [showScoobyCard, setShowScoobyCard] = useState(false);
   const [isScoobyFront, setIsScoobyFront] = useState(false);
+  const [showNVitralCard, setShowNVitralCard] = useState(false);
+  const [isNVitralFront, setIsNVitralFront] = useState(false);
+  const [isScoobyLeaving, setIsScoobyLeaving] = useState(false);
+  const [showNosferatuCard, setShowNosferatuCard] = useState(false);
+  const [isNosferatuFront, setIsNosferatuFront] = useState(false);
+  const [isNVitralLeaving, setIsNVitralLeaving] = useState(false);
+  const [showBananaCard, setShowBananaCard] = useState(false);
+  const [isBananaFront, setIsBananaFront] = useState(false);
+  const [isNosferatuLeaving, setIsNosferatuLeaving] = useState(false);
   const boosters = [
     "/image/booster/pokelillev7.png",
     "/image/booster/pokelillev7.png",
@@ -133,7 +142,7 @@ function App() {
             <div
               className={`card-reveal ${showScoobyCard ? "visible" : ""} ${
                 isScoobyFront ? "booster-down" : ""
-              }`}
+              } ${isScoobyLeaving ? "slide-out" : ""}`}
               style={{
                 pointerEvents: isScoobyFront ? "all" : "none",
                 zIndex: isScoobyFront ? 30 : 4, // En dessous de Hysta (z-index: 5) au début
@@ -141,6 +150,87 @@ function App() {
             >
               <HoloCard
                 imageUrl="/image/carte/scooby.png"
+                className="visible"
+                onSecondClick={() => {
+                  console.log("🎲 Second clic sur Scooby");
+                  setShowNVitralCard(true);
+                  setIsScoobyLeaving(true);
+
+                  setTimeout(() => {
+                    setIsNVitralFront(true);
+                  }, 800);
+                }}
+              />
+            </div>
+          )}
+
+          {/* Carte N-Vitral */}
+          {showNVitralCard && (
+            <div
+              className={`card-reveal ${showNVitralCard ? "visible" : ""} ${
+                isNVitralFront ? "booster-down" : ""
+              } ${isNVitralLeaving ? "slide-out" : ""}`}
+              style={{
+                pointerEvents: isNVitralFront ? "all" : "none",
+                zIndex: isNVitralFront ? 30 : 4,
+              }}
+            >
+              <HoloCard
+                imageUrl="/image/carte/nvitral.png"
+                className="visible"
+                onSecondClick={() => {
+                  console.log("🎲 Second clic sur N-Vitral");
+                  setShowNosferatuCard(true);
+                  setIsNVitralLeaving(true);
+
+                  setTimeout(() => {
+                    setIsNosferatuFront(true);
+                  }, 800);
+                }}
+              />
+            </div>
+          )}
+
+          {/* Carte Nosferatu */}
+          {showNosferatuCard && (
+            <div
+              className={`card-reveal ${showNosferatuCard ? "visible" : ""} ${
+                isNosferatuFront ? "booster-down" : ""
+              } ${isNosferatuLeaving ? "slide-out" : ""}`}
+              style={{
+                pointerEvents: isNosferatuFront ? "all" : "none",
+                zIndex: isNosferatuFront ? 30 : 4,
+              }}
+            >
+              <HoloCard
+                imageUrl="/image/carte/nosferatu.png"
+                className="visible"
+                onSecondClick={() => {
+                  console.log("🎲 Second clic sur Nosferatu");
+                  setShowBananaCard(true);
+                  setIsNosferatuLeaving(true);
+
+                  setTimeout(() => {
+                    setIsBananaFront(true);
+                  }, 800);
+                }}
+              />
+            </div>
+          )}
+
+          {/* Carte Banana */}
+          {showBananaCard && (
+            <div
+              className={`card-reveal ${showBananaCard ? "visible" : ""} ${
+                isBananaFront ? "booster-down" : ""
+              }`}
+              style={{
+                pointerEvents: isBananaFront ? "all" : "none",
+                zIndex: isBananaFront ? 30 : 4,
+              }}
+            >
+              <HoloCard
+                imageUrl="/image/carte/banana.png"
                 className="visible"
               />
             </div>
