@@ -11,6 +11,8 @@ function App() {
   const [isDescending, setIsDescending] = useState(false);
   const [showCardFront, setShowCardFront] = useState(false);
   const [isCardLeaving, setIsCardLeaving] = useState(false);
+  const [showScoobyCard, setShowScoobyCard] = useState(false);
+  const [isScoobyFront, setIsScoobyFront] = useState(false);
   const boosters = [
     "/image/booster/pokelillev7.png",
     "/image/booster/pokelillev7.png",
@@ -115,8 +117,31 @@ function App() {
                 className="visible"
                 onSecondClick={() => {
                   console.log("🎲 onSecondClick appelé dans App");
+                  setShowScoobyCard(true);
                   setIsCardLeaving(true);
+
+                  setTimeout(() => {
+                    setIsScoobyFront(true);
+                  }, 800);
                 }}
+              />
+            </div>
+          )}
+
+          {/* Carte Scooby */}
+          {showScoobyCard && (
+            <div
+              className={`card-reveal ${showScoobyCard ? "visible" : ""} ${
+                isScoobyFront ? "booster-down" : ""
+              }`}
+              style={{
+                pointerEvents: isScoobyFront ? "all" : "none",
+                zIndex: isScoobyFront ? 30 : 4, // En dessous de Hysta (z-index: 5) au début
+              }}
+            >
+              <HoloCard
+                imageUrl="/image/carte/scooby.png"
+                className="visible"
               />
             </div>
           )}
