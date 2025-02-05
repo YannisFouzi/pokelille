@@ -107,16 +107,23 @@ const HoloCard = ({ imageUrl, className = "" }: HoloCardProps) => {
     }
 
     console.log("✨ Classes avant:", card.classList.toString());
-    // Figer la carte dans sa position actuelle avant de retirer l'animation
+
+    // Figer la carte dans sa position actuelle
     const computedStyle = window.getComputedStyle(card);
     const matrix = computedStyle.transform;
     card.style.transform = matrix;
 
+    // Arrêter l'animation
     card.style.animation = "none";
     card.classList.remove(`animation-${animationIndex.current}`);
     card.classList.remove("animated");
+
+    // Ajouter la classe pour la transition de retour
+    requestAnimationFrame(() => {
+      card.classList.add("returning");
+    });
+
     console.log("✨ Classes après:", card.classList.toString());
-    console.log("🎨 Style animation:", card.style.animation);
   };
 
   return (

@@ -12,7 +12,7 @@
   box-shadow: -5px -5px 5px -5px var(--color1), 5px 5px 5px -5px var(--color2),
     -7px -7px 10px -5px transparent, 7px 7px 10px -5px transparent,
     0 0 5px 0px rgba(255, 255, 255, 0), 0 55px 35px -20px rgba(0, 0, 0, 0.5);
-  transition: transform 0.5s ease, box-shadow 0.2s ease;
+  transition: transform 1.2s ease-out;
   will-change: transform, filter;
   background-color: #040712;
   background-size: cover;
@@ -291,4 +291,9 @@
 .card-reveal.visible {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* Quand on arrête l'animation, on ajoute cette classe */
+.holo-card.returning {
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) !important;
 }
