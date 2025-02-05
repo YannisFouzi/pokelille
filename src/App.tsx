@@ -89,7 +89,7 @@ function App() {
 
   return (
     <div className="h-screen relative overflow-hidden">
-      {/* Gradient du haut (1/3) */}
+      {/* Gradient du haut */}
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-violet-600 to-green-500 gradient-section" />
 
       {/* Fond du bas (2/3) */}
