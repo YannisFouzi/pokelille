@@ -381,3 +381,18 @@
   z-index: 30;
   transition: opacity 0.5s ease-in-out, z-index 0s linear;
 }
+
+@keyframes slideOut {
+  from {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+  to {
+    transform: translate(150%, -50%);
+    opacity: 0;
+  }
+}
+
+.card-reveal.slide-out {
+  animation: slideOut 0.8s ease-in-out forwards;
+}

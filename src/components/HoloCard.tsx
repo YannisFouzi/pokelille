@@ -1,15 +1,21 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./HoloCard.css";
 
 interface HoloCardProps {
   imageUrl: string;
   className?: string;
+  onSecondClick?: () => void;
 }
 
-const HoloCard = ({ imageUrl, className = "" }: HoloCardProps) => {
+const HoloCard = ({
+  imageUrl,
+  className = "",
+  onSecondClick,
+}: HoloCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const styleRef = useRef<HTMLStyleElement>(null);
   const animationIndex = useRef(Math.floor(Math.random() * 4)); // 4 variations différentes
+  const [hasBeenClicked, setHasBeenClicked] = useState(false);
 
   useEffect(() => {
     const card = cardRef.current;
@@ -98,6 +104,7 @@ const HoloCard = ({ imageUrl, className = "" }: HoloCardProps) => {
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
     console.log("🖱️ onClick event triggered");
+    console.log("🎯 État hasBeenClicked:", hasBeenClicked);
     e.stopPropagation();
 
     const card = cardRef.current;
@@ -106,24 +113,32 @@ const HoloCard = ({ imageUrl, className = "" }: HoloCardProps) => {
       return;
     }
 
-    console.log("✨ Classes avant:", card.classList.toString());
-
-    // Figer la carte dans sa position actuelle
-    const computedStyle = window.getComputedStyle(card);
-    const matrix = computedStyle.transform;
-    card.style.transform = matrix;
-
-    // Arrêter l'animation
-    card.style.animation = "none";
-    card.classList.remove(`animation-${animationIndex.current}`);
-    card.classList.remove("animated");
-
-    // Ajouter la classe pour la transition de retour
-    requestAnimationFrame(() => {
-      card.classList.add("returning");
-    });
-
-    console.log("✨ Classes après:", card.classList.toString());
+    if (!hasBeenClicked) {
+      // Premier clic : arrêter l'animation
+      console.log(
+        "✨ Premier clic - Classes avant:",
+        card.classList.toString()
+      );
+      const computedStyle = window.getComputedStyle(card);
+      const matrix = computedStyle.transform;
+      card.style.transform = matrix;
+      card.style.animation = "none";
+      card.classList.remove(`animation-${animationIndex.current}`);
+      card.classList.remove("animated");
+      requestAnimationFrame(() => {
+        card.classList.add("returning");
+      });
+      setHasBeenClicked(true);
+      console.log(
+        "✨ Premier clic - Classes après:",
+        card.classList.toString()
+      );
+    } else {
+      // Deuxième clic : déclencher l'animation de sortie
+      console.log("✨ Deuxième clic - Déclencher la sortie");
+      console.log("🎭 onSecondClick est défini ?", !!onSecondClick);
+      onSecondClick?.();
+    }
   };
 
   return (

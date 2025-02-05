@@ -10,6 +10,7 @@ function App() {
   const [showCard, setShowCard] = useState(false);
   const [isDescending, setIsDescending] = useState(false);
   const [showCardFront, setShowCardFront] = useState(false);
+  const [isCardLeaving, setIsCardLeaving] = useState(false);
   const boosters = [
     "/image/booster/pokelillev7.png",
     "/image/booster/pokelillev7.png",
@@ -106,10 +107,17 @@ function App() {
             <div
               className={`card-reveal ${showCard ? "visible" : ""} ${
                 showCardFront ? "booster-down" : ""
-              }`}
+              } ${isCardLeaving ? "slide-out" : ""}`}
               style={{ pointerEvents: showCardFront ? "all" : "none" }}
             >
-              <HoloCard imageUrl="/image/carte/hysta.png" className="visible" />
+              <HoloCard
+                imageUrl="/image/carte/hysta.png"
+                className="visible"
+                onSecondClick={() => {
+                  console.log("🎲 onSecondClick appelé dans App");
+                  setIsCardLeaving(true);
+                }}
+              />
             </div>
           )}
 
