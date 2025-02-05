@@ -343,3 +343,33 @@
     opacity: 1;
   }
 }
+
+/* Animation pour la descente du booster */
+.booster-descend {
+  animation: descend 2s forwards;
+}
+
+@keyframes descend {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(200%);
+  }
+}
+
+/* Styles pour la carte */
+.card-reveal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  opacity: 0;
+  z-index: 10;
+}
+
+.card-reveal.visible {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}

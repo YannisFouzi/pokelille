@@ -5,6 +5,9 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTearing, setIsTearing] = useState(false);
+  const [showTitle, setShowTitle] = useState(true);
+  const [showCard, setShowCard] = useState(false);
+  const [isDescending, setIsDescending] = useState(false);
   const boosters = [
     "/image/booster/pokelillev7.png",
     "/image/booster/pokelillev7.png",
@@ -32,6 +35,7 @@ function App() {
       if (isExpanded) {
         // Si l'image est déjà agrandie, on déclenche l'animation de déchirement
         setIsTearing(true);
+        setShowTitle(false); // Cache le titre quand le paquet commence à s'ouvrir
       } else {
         // Sinon, on agrandit simplement l'image
         setIsExpanded(true);
@@ -50,11 +54,13 @@ function App() {
   };
 
   const handleTearEnd = () => {
-    // Après l'animation, on peut faire apparaître le contenu du booster
+    // D'abord on montre la carte
+    setShowCard(true);
+
+    // On attend plus longtemps avant de faire descendre le booster
     setTimeout(() => {
-      setIsTearing(false);
-      // Ici vous pourrez ajouter la logique pour afficher les cartes
-    }, 1000);
+      setIsDescending(true);
+    }, 1000); // Augmenté de 300ms à 1000ms pour une pause plus longue
   };
 
   const handleTitleClick = () => {
@@ -72,20 +78,28 @@ function App() {
 
       {/* Contenu */}
       <div className="relative z-10 container mx-auto px-4 pt-16 pb-8">
-        <div
-          className={`season-title shadow-sm ${isExpanded ? "selected" : ""}`}
-          onClick={handleTitleClick}
-        >
-          <h1 className="text-gray-600 text-xl font-normal relative z-10">
-            {isExpanded ? "Choisir celle-ci" : "Choisissez une soirée."}
-          </h1>
-        </div>
+        {showTitle && (
+          <div
+            className={`season-title shadow-sm ${isExpanded ? "selected" : ""}`}
+            onClick={handleTitleClick}
+          >
+            <h1 className="text-gray-600 text-xl font-normal relative z-10">
+              {isExpanded ? "Choisir celle-ci" : "Choisissez une soirée."}
+            </h1>
+          </div>
+        )}
 
         <div
           className={`carousel-container relative ${
             isExpanded ? "h-[800px]" : "h-[600px]"
           } max-w-3xl mx-auto transition-all duration-500`}
         >
+          <img
+            src="/image/carte/hysta.png"
+            alt="Carte Hysta"
+            className={`card-reveal ${showCard ? "visible" : ""}`}
+          />
+
           {boosters.map((booster, index) => {
             let position = index - currentIndex;
             if (position < 0) position += boosters.length;
@@ -113,7 +127,9 @@ function App() {
                 <div className="relative">
                   {position === 0 ? (
                     <div
-                      className={`${isTearing ? "tearing" : ""}`}
+                      className={`${isTearing ? "tearing" : ""} ${
+                        isDescending ? "booster-descend" : ""
+                      }`}
                       onAnimationEnd={handleTearEnd}
                     >
                       <img
