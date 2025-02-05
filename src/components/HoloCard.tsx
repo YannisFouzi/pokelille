@@ -93,12 +93,39 @@ const HoloCard = ({ imageUrl, className = "" }: HoloCardProps) => {
     };
   }, []);
 
+  // Ajoutons aussi un log dans le return pour voir si le composant se monte correctement
+  console.log("🔄 HoloCard render - animationIndex:", animationIndex.current);
+
+  const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    console.log("🖱️ onClick event triggered");
+    e.stopPropagation();
+
+    const card = cardRef.current;
+    if (!card) {
+      console.log("❌ Card ref est null");
+      return;
+    }
+
+    console.log("✨ Classes avant:", card.classList.toString());
+    // Figer la carte dans sa position actuelle avant de retirer l'animation
+    const computedStyle = window.getComputedStyle(card);
+    const matrix = computedStyle.transform;
+    card.style.transform = matrix;
+
+    card.style.animation = "none";
+    card.classList.remove(`animation-${animationIndex.current}`);
+    card.classList.remove("animated");
+    console.log("✨ Classes après:", card.classList.toString());
+    console.log("🎨 Style animation:", card.style.animation);
+  };
+
   return (
     <>
       <div
         ref={cardRef}
         className={`holo-card animated ${className}`}
         style={{ backgroundImage: `url(${imageUrl})` }}
+        onClick={handleCardClick}
       />
       <style ref={styleRef} />
     </>

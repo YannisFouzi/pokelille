@@ -21,6 +21,9 @@
   transform-origin: center;
   transform: perspective(1000px) rotateX(var(--rotateX)) rotateY(var(--rotateY))
     rotateZ(var(--rotateZ));
+  pointer-events: auto;
+  z-index: 100;
+  cursor: pointer;
 }
 
 .holo-card:hover {
@@ -42,6 +45,7 @@
   opacity: 0.5;
   mix-blend-mode: color-dodge;
   transition: all 0.33s ease;
+  pointer-events: none;
 }
 
 .holo-card:before {

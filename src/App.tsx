@@ -9,6 +9,7 @@ function App() {
   const [showTitle, setShowTitle] = useState(true);
   const [showCard, setShowCard] = useState(false);
   const [isDescending, setIsDescending] = useState(false);
+  const [showCardFront, setShowCardFront] = useState(false);
   const boosters = [
     "/image/booster/pokelillev7.png",
     "/image/booster/pokelillev7.png",
@@ -61,7 +62,12 @@ function App() {
     // On attend plus longtemps avant de faire descendre le booster
     setTimeout(() => {
       setIsDescending(true);
-    }, 1000); // Augmenté de 300ms à 1000ms pour une pause plus longue
+
+      // On attend que le booster soit presque complètement descendu
+      setTimeout(() => {
+        setShowCardFront(true);
+      }, 1900); // Presque à la fin de l'animation de descente de 2s
+    }, 1000);
   };
 
   const handleTitleClick = () => {
@@ -97,11 +103,13 @@ function App() {
         >
           {/* On n'affiche la carte que si showCard est true */}
           {showCard && (
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-              <HoloCard
-                imageUrl="/image/carte/hysta.png"
-                className={showCard ? "visible" : ""}
-              />
+            <div
+              className={`card-reveal ${showCard ? "visible" : ""} ${
+                showCardFront ? "booster-down" : ""
+              }`}
+              style={{ pointerEvents: showCardFront ? "all" : "none" }}
+            >
+              <HoloCard imageUrl="/image/carte/hysta.png" className="visible" />
             </div>
           )}
 
