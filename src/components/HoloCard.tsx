@@ -6,34 +6,35 @@ interface HoloCardProps {
   className?: string;
 }
 
-export const HoloCard = ({ imageUrl, className = "" }: HoloCardProps) => {
+const HoloCard = ({ imageUrl, className = "" }: HoloCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const styleRef = useRef<HTMLStyleElement>(null);
-  let timeoutId: number;
+  const animationIndex = useRef(Math.floor(Math.random() * 4)); // 4 variations différentes
 
   useEffect(() => {
     const card = cardRef.current;
     const style = styleRef.current;
+    let timeoutId: number;
+
+    if (!card || !style) return;
+
+    // Ajoute une classe d'animation aléatoire
+    card.classList.add(`animation-${animationIndex.current}`);
 
     const handleMove = (e: MouseEvent | TouchEvent) => {
-      if (!card || !style) return;
-
-      // Normaliser la position tactile/souris
+      const rect = card.getBoundingClientRect();
       const pos =
-        e instanceof MouseEvent
-          ? [e.offsetX, e.offsetY]
-          : [
-              e.touches[0].clientX - card.getBoundingClientRect().left,
-              e.touches[0].clientY - card.getBoundingClientRect().top,
-            ];
+        "touches" in e
+          ? [e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top]
+          : [e.clientX - rect.left, e.clientY - rect.top];
 
       const h = card.offsetHeight;
       const w = card.offsetWidth;
+
       const px = Math.abs(Math.floor((100 / w) * pos[0]) - 100);
       const py = Math.abs(Math.floor((100 / h) * pos[1]) - 100);
       const pa = 50 - px + (50 - py);
 
-      // Calculs pour les positions du gradient/arrière-plan
       const lp = 50 + (px - 50) / 1.5;
       const tp = 50 + (py - 50) / 1.5;
       const px_spark = 50 + (px - 50) / 7;
@@ -42,43 +43,53 @@ export const HoloCard = ({ imageUrl, className = "" }: HoloCardProps) => {
       const ty = ((tp - 50) / 2) * -1;
       const tx = ((lp - 50) / 1.5) * 0.5;
 
-      // CSS à appliquer
-      const tf = `transform: rotateX(${ty}deg) rotateY(${tx}deg)`;
-      const styleText = `
-        .holo-card:hover:before { background-position: ${lp}% ${tp}%; }
-        .holo-card:hover:after { background-position: ${px_spark}% ${py_spark}%; opacity: ${
-        p_opc / 100
-      }; }
-      `;
+      requestAnimationFrame(() => {
+        card.style.setProperty("--rotateX", `${ty}deg`);
+        card.style.setProperty("--rotateY", `${tx}deg`);
+        card.style.setProperty("--rotateZ", "0deg");
 
-      card.style.cssText = tf;
-      style.innerHTML = styleText;
+        const styleText = `
+          .holo-card:hover:before { background-position: ${lp}% ${tp}%; }
+          .holo-card:hover:after { background-position: ${px_spark}% ${py_spark}%; opacity: ${
+          p_opc / 100
+        }; }
+        `;
+
+        style.innerHTML = styleText;
+      });
+
       card.classList.remove("animated");
     };
 
     const handleLeave = () => {
-      if (!card || !style) return;
+      const card = cardRef.current;
+      if (!card) return;
+
       style.innerHTML = "";
-      card.style.cssText = "";
+      card.style.setProperty("--rotateX", "0deg");
+      card.style.setProperty("--rotateY", "0deg");
+      card.style.setProperty("--rotateZ", "0deg");
+
       clearTimeout(timeoutId);
       timeoutId = window.setTimeout(() => {
         card.classList.add("animated");
       }, 2500);
     };
 
-    card?.addEventListener("mousemove", handleMove);
-    card?.addEventListener("touchmove", handleMove);
-    card?.addEventListener("mouseout", handleLeave);
-    card?.addEventListener("touchend", handleLeave);
-    card?.addEventListener("touchcancel", handleLeave);
+    card.addEventListener("mousemove", handleMove);
+    card.addEventListener("touchmove", handleMove);
+    card.addEventListener("mouseout", handleLeave);
+    card.addEventListener("touchend", handleLeave);
+    card.addEventListener("touchcancel", handleLeave);
 
     return () => {
-      card?.removeEventListener("mousemove", handleMove);
-      card?.removeEventListener("touchmove", handleMove);
-      card?.removeEventListener("mouseout", handleLeave);
-      card?.removeEventListener("touchend", handleLeave);
-      card?.removeEventListener("touchcancel", handleLeave);
+      card.removeEventListener("mousemove", handleMove);
+      card.removeEventListener("touchmove", handleMove);
+      card.removeEventListener("mouseout", handleLeave);
+      card.removeEventListener("touchend", handleLeave);
+      card.removeEventListener("touchcancel", handleLeave);
       clearTimeout(timeoutId);
+      card.classList.remove(`animation-${animationIndex.current}`);
     };
   }, []);
 
@@ -87,9 +98,11 @@ export const HoloCard = ({ imageUrl, className = "" }: HoloCardProps) => {
       <div
         ref={cardRef}
         className={`holo-card animated ${className}`}
-        style={{ "--front": `url(${imageUrl})` } as React.CSSProperties}
+        style={{ backgroundImage: `url(${imageUrl})` }}
       />
       <style ref={styleRef} />
     </>
   );
 };
+
+export default HoloCard;

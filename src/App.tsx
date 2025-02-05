@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import { HoloCard } from "./components/HoloCard";
+import HoloCard from "./components/HoloCard";
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -95,12 +95,15 @@ function App() {
             isExpanded ? "h-[800px]" : "h-[600px]"
           } max-w-3xl mx-auto transition-all duration-500`}
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <HoloCard
-              imageUrl="/image/carte/hysta.png"
-              className={`card-reveal ${showCard ? "visible" : ""}`}
-            />
-          </div>
+          {/* On n'affiche la carte que si showCard est true */}
+          {showCard && (
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+              <HoloCard
+                imageUrl="/image/carte/hysta.png"
+                className={showCard ? "visible" : ""}
+              />
+            </div>
+          )}
 
           {boosters.map((booster, index) => {
             let position = index - currentIndex;
