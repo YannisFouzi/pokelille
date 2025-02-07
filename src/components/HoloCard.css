@@ -283,6 +283,7 @@
 
 /* Modifier la classe card-reveal pour positionner la carte */
 .card-reveal {
+  /* Supprimer les styles de position ici s'ils existent */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s ease-in-out;

@@ -369,14 +369,14 @@
 
 /* Styles pour la carte */
 .card-reveal {
-  position: absolute;
-  top: 50%;
+  position: fixed;
+  top: 35vh;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 300px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.5s ease-in-out, z-index 0s linear 0.5s;
+  transition: all 0.5s ease-in-out;
   z-index: 5;
 }
 
@@ -388,7 +388,6 @@
 /* Nouvelle classe pour quand le booster descend */
 .card-reveal.booster-down {
   z-index: 30;
-  transition: opacity 0.5s ease-in-out, z-index 0s linear;
 }
 
 @keyframes slideOut {
@@ -402,8 +401,9 @@
   }
 }
 
+/* Remettre cette classe importante pour l'animation de sortie */
 .card-reveal.slide-out {
-  animation: slideOut 0.8s ease-in-out forwards;
+  animation: slideOut 0.8s ease-out forwards;
 }
 
 /* Animation pour l'arrivée des boosters par le bas */
