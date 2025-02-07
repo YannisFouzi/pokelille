@@ -86,9 +86,13 @@ function App() {
   };
 
   return (
-    <div className="h-screen relative overflow-hidden">
+    <div
+      className={`h-screen relative overflow-hidden ${
+        isTearing ? "tearing" : ""
+      }`}
+    >
       {/* Gradient du haut */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-violet-600 to-green-500 gradient-section" />
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-600 via-sky-300 via-pink-300 to-pink-600 gradient-section" />
 
       {/* Fond du bas (2/3) */}
       <div className="absolute top-0 left-0 w-full h-full bg-white white-section" />

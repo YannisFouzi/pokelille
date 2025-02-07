@@ -90,10 +90,12 @@
 .gradient-section {
   clip-path: polygon(0 0, 100% 0, 100% 25%, 0 35%);
   animation: gradientSlideIn 1s ease-out;
+  transition: clip-path 1.5s ease-out;
 }
 
 .white-section {
   clip-path: polygon(0 35%, 100% 25%, 100% 100%, 0 100%);
+  transition: clip-path 1.5s ease-out;
 }
 
 .bg-white {
@@ -464,4 +466,23 @@
 /* Les autres cartes gardent leur transition simple */
 .card-reveal:not(.first-card) {
   transition: opacity 0.5s ease-in-out;
+}
+
+/* Quand le paquet s'ouvre */
+.tearing .gradient-section {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    0 100%
+  ); /* Le gradient couvre tout */
+}
+
+.tearing .white-section {
+  clip-path: polygon(
+    0 100%,
+    100% 100%,
+    100% 100%,
+    0 100%
+  ); /* Le blanc disparaît */
 }
