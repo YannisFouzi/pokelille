@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import CardParticles from "./components/CardParticles";
 import HoloCard from "./components/HoloCard";
 
 function App() {
@@ -68,20 +69,15 @@ function App() {
   };
 
   const handleTearEnd = () => {
-    // On attend un peu avant de montrer la carte
+    // On attend un peu avant de montrer la carte avec son animation
     setTimeout(() => {
       setShowCard(true);
-    }, 800); // Attendre 800ms avant de montrer la carte
-
-    // On attend plus longtemps avant de faire descendre le booster
-    setTimeout(() => {
-      setIsDescending(true);
-
-      // On attend que le booster soit presque complètement descendu
+      // On déclenche la descente du booster juste après
       setTimeout(() => {
-        setShowCardFront(true);
-      }, 1900); // Presque à la fin de l'animation de descente de 2s
-    }, 1000);
+        setIsDescending(true);
+        setShowCardFront(true); // On active showCardFront en même temps que la descente
+      }, 200);
+    }, 800);
   };
 
   const handleTitleClick = () => {
@@ -127,15 +123,15 @@ function App() {
                 imageUrl="/image/carte/hysta.png"
                 className="visible"
                 onSecondClick={() => {
-                  console.log("🎲 onSecondClick appelé dans App");
                   setShowScoobyCard(true);
                   setIsCardLeaving(true);
-
                   setTimeout(() => {
                     setIsScoobyFront(true);
                   }, 800);
                 }}
+                isFirstCard={true}
               />
+              {showCardFront && !isCardLeaving && <CardParticles />}
             </div>
           )}
 

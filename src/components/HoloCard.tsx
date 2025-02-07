@@ -28,6 +28,7 @@ const HoloCard = ({
 
     // Ajoute une classe d'animation aléatoire
     card.classList.add(`animation-${animationIndex.current}`);
+    card.classList.add("animated"); // Ajout de la classe animated dès le début
 
     const handleMove = (e: MouseEvent | TouchEvent) => {
       const rect = card.getBoundingClientRect();
@@ -91,15 +92,18 @@ const HoloCard = ({
     card.addEventListener("touchcancel", handleLeave);
 
     return () => {
-      card.removeEventListener("mousemove", handleMove);
-      card.removeEventListener("touchmove", handleMove);
-      card.removeEventListener("mouseout", handleLeave);
-      card.removeEventListener("touchend", handleLeave);
-      card.removeEventListener("touchcancel", handleLeave);
       clearTimeout(timeoutId);
-      card.classList.remove(`animation-${animationIndex.current}`);
+      if (card) {
+        card.removeEventListener("mousemove", handleMove);
+        card.removeEventListener("touchmove", handleMove);
+        card.removeEventListener("mouseout", handleLeave);
+        card.removeEventListener("touchend", handleLeave);
+        card.removeEventListener("touchcancel", handleLeave);
+        card.classList.remove(`animation-${animationIndex.current}`);
+        card.classList.remove("animated");
+      }
     };
-  }, []);
+  }, []); // Retour à la dépendance vide
 
   // Ajoutons aussi un log dans le return pour voir si le composant se monte correctement
   console.log("🔄 HoloCard render - animationIndex:", animationIndex.current);
