@@ -13,17 +13,22 @@
     -7px -7px 10px -5px transparent, 7px 7px 10px -5px transparent,
     0 0 5px 0px rgba(255, 255, 255, 0), 0 55px 35px -20px rgba(0, 0, 0, 0.5);
   transition: transform 1.2s ease-out;
-  will-change: transform, filter;
+  will-change: transform, filter, background-image;
   background-color: #040712;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  transform-origin: center;
+  will-change: transform, background-image;
+  image-rendering: -webkit-optimize-contrast;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
   transform: perspective(1000px) rotateX(var(--rotateX)) rotateY(var(--rotateY))
-    rotateZ(var(--rotateZ));
+    rotateZ(var(--rotateZ)) translateZ(0);
   pointer-events: auto;
   z-index: 100;
   cursor: pointer;
+  -webkit-transform-style: preserve-3d;
 }
 
 .holo-card:hover {

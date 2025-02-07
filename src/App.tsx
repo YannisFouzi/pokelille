@@ -26,11 +26,13 @@ function App() {
   const [isBananaFront, setIsBananaFront] = useState(false);
   const [isNosferatuLeaving, setIsNosferatuLeaving] = useState(false);
   const [autoplayStarted, setAutoplayStarted] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const boosters = [
     "/image/booster/pokelillev7.png",
     "/image/booster/pokelillev7.png",
     "/image/booster/pokelillev7.png",
   ];
+  const preloadedImages = new Map();
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -44,6 +46,47 @@ function App() {
     );
   };
 
+  const preloadImage = (src: string) => {
+    if (preloadedImages.has(src)) {
+      return preloadedImages.get(src);
+    }
+
+    const img = new Image();
+    const promise = new Promise<void>((resolve) => {
+      img.onload = () => {
+        console.log("✅ Image chargée et stockée:", src);
+        resolve();
+      };
+      img.src = src;
+    });
+    preloadedImages.set(src, promise);
+    return promise;
+  };
+
+  const preloadAllCards = async () => {
+    await Promise.all(cardImages.map(preloadImage));
+  };
+
+  // Un seul useEffect pour le préchargement
+  useEffect(() => {
+    const allImages = [
+      "/image/carte/hysta.png",
+      ...cardImages,
+      "/image/booster/pokelillev7.png",
+    ];
+
+    Promise.all(allImages.map(preloadImage)).then(() => {
+      setImagesLoaded(true);
+    });
+  }, []);
+
+  const cardImages = [
+    "/image/carte/scooby.png",
+    "/image/carte/nvitral.png",
+    "/image/carte/nosferatu.png",
+    "/image/carte/banana.png",
+  ];
+
   const handleImageClick = (index: number) => {
     let diff = index - currentIndex;
     if (diff < 0) diff += boosters.length;
@@ -51,11 +94,15 @@ function App() {
     // Si on clique sur l'image centrale
     if (diff === 0) {
       if (isExpanded) {
+        // Précharger la première carte immédiatement
+        preloadImage("/image/carte/hysta.png");
+        // Précharger les autres cartes pendant l'animation
+        preloadAllCards();
+
         // Si l'image est déjà agrandie, on déclenche l'animation de déchirement
         setIsTearing(true);
-        setShowTitle(false); // Cache le titre quand le paquet commence à s'ouvrir
+        setShowTitle(false);
       } else {
-        // Sinon, on agrandit simplement l'image
         setIsExpanded(true);
       }
       return;
@@ -160,6 +207,11 @@ function App() {
     sequence();
   }, []); // Ne s'exécute qu'une fois au montage
 
+  // Ne rendre le contenu que lorsque les images sont chargées
+  if (!imagesLoaded) {
+    return null; // ou un loader si vous préférez
+  }
+
   return (
     <div
       className={`h-screen relative overflow-hidden ${
@@ -229,7 +281,6 @@ function App() {
                 imageUrl="/image/carte/scooby.png"
                 className="visible"
                 onSecondClick={() => {
-                  console.log("🎲 Second clic sur Scooby");
                   setShowNVitralCard(true);
                   setIsScoobyLeaving(true);
 
@@ -256,7 +307,6 @@ function App() {
                 imageUrl="/image/carte/nvitral.png"
                 className="visible"
                 onSecondClick={() => {
-                  console.log("🎲 Second clic sur N-Vitral");
                   setShowNosferatuCard(true);
                   setIsNVitralLeaving(true);
 
@@ -283,7 +333,6 @@ function App() {
                 imageUrl="/image/carte/nosferatu.png"
                 className="visible"
                 onSecondClick={() => {
-                  console.log("🎲 Second clic sur Nosferatu");
                   setShowBananaCard(true);
                   setIsNosferatuLeaving(true);
 

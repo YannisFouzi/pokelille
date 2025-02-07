@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./HoloCard.css";
 
 interface HoloCardProps {
@@ -18,8 +18,14 @@ const HoloCard = ({
 }: HoloCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const styleRef = useRef<HTMLStyleElement>(null);
-  const animationIndex = useRef(Math.floor(Math.random() * 4)); // 4 variations différentes
+  const animationIndex = useRef<number>();
   const [hasBeenClicked, setHasBeenClicked] = useState(false);
+
+  useEffect(() => {
+    if (animationIndex.current === undefined) {
+      animationIndex.current = Math.floor(Math.random() * 4);
+    }
+  }, []);
 
   useEffect(() => {
     const card = cardRef.current;
@@ -107,9 +113,6 @@ const HoloCard = ({
     };
   }, []); // Retour à la dépendance vide
 
-  // Ajoutons aussi un log dans le return pour voir si le composant se monte correctement
-  console.log("🔄 HoloCard render - animationIndex:", animationIndex.current);
-
   useEffect(() => {
     // Ne lance l'animation automatique que si autoAnimation est true
     if (!autoAnimation || hasBeenClicked) return;
@@ -184,12 +187,19 @@ const HoloCard = ({
       <div
         ref={cardRef}
         className={`holo-card ${className} ${isFirstCard ? "first-card" : ""}`}
-        style={{ backgroundImage: `url(${imageUrl})` }}
         onClick={handleCardClick}
+        style={{ backgroundImage: `url(${imageUrl})` }}
       />
       <style ref={styleRef} />
     </>
   );
 };
 
-export default HoloCard;
+export default React.memo(HoloCard, (prevProps, nextProps) => {
+  return (
+    prevProps.imageUrl === nextProps.imageUrl &&
+    prevProps.className === nextProps.className &&
+    prevProps.isFirstCard === nextProps.isFirstCard &&
+    prevProps.autoAnimation === nextProps.autoAnimation
+  );
+});
