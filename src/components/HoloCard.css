@@ -4,8 +4,8 @@
   --rotateX: 0deg;
   --rotateY: 0deg;
   --rotateZ: 0deg;
-  width: 300px;
-  height: 418px;
+  width: 450px;
+  height: 630px;
   position: relative;
   overflow: hidden;
   border-radius: 5%/3.5%;
@@ -17,7 +17,7 @@
   background-color: #040712;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: 50% 50%;
+  background-position: center;
   transform-origin: center;
   transform: perspective(1000px) rotateX(var(--rotateX)) rotateY(var(--rotateY))
     rotateZ(var(--rotateZ));
