@@ -127,8 +127,8 @@ function App() {
 
       // On attend que le booster soit suffisamment descendu avant de mettre la carte au premier plan
       setTimeout(() => {
-        setShowCardFront(true); // Déplacé dans un nouveau setTimeout
-      }, 1000); // Délai plus long pour laisser le booster descendre
+        setShowCardFront(true);
+      }, 1000);
     }, 800);
   };
 
@@ -142,6 +142,9 @@ function App() {
     if (!AUTO_ANIMATION || autoplayStarted) return;
 
     const sequence = async () => {
+      // Délai initial de 2 secondes
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       setAutoplayStarted(true);
 
       // Attendre 1 seconde après le chargement
@@ -153,9 +156,14 @@ function App() {
       // Attendre 1 seconde
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Double clic à gauche rapide
+      // Premier clic à gauche
       prevSlide();
-      setTimeout(prevSlide, 100);
+
+      // Attendre 2 secondes
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Deuxième clic à gauche
+      prevSlide();
 
       // Attendre 1 seconde
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -163,39 +171,44 @@ function App() {
       // Clic sur "Choisissez une soirée"
       setIsExpanded(true);
 
-      // Attendre 1 seconde
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Attendre 2 secondes (au lieu de 1)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Clic sur "Choisir celle-ci" (déclenche l'ouverture)
       setIsTearing(true);
       setShowTitle(false);
 
-      // Attendre que le booster s'ouvre (handleTearEnd s'occupera de la suite)
+      // Attendre que le booster s'ouvre (800ms inchangé)
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       // La séquence des cartes commence automatiquement
       const showNextCard = async () => {
-        // Attendre 3 secondes pour chaque carte
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        setShowCard(true);
-        setShowCardFront(true);
+        // Attendre que la première carte finisse son animation d'apparition (environ 2s)
+        await new Promise((resolve) => setTimeout(resolve, 2000));
 
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        setShowScoobyCard(true);
+        // Laisser l'animation holographique se jouer pendant 3 secondes + 1 seconde de transition
+        await new Promise((resolve) => setTimeout(resolve, 4000));
         setIsCardLeaving(true);
+
+        // Deuxième carte (Scooby)
+        await new Promise((resolve) => setTimeout(resolve, 4000)); // 3s animation + 1s transition
+        setShowScoobyCard(true);
         setTimeout(() => setIsScoobyFront(true), 800);
 
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        // Troisième carte (N-Vitral)
+        await new Promise((resolve) => setTimeout(resolve, 4000)); // 3s animation + 1s transition
         setShowNVitralCard(true);
         setIsScoobyLeaving(true);
         setTimeout(() => setIsNVitralFront(true), 800);
 
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        // Quatrième carte (Nosferatu)
+        await new Promise((resolve) => setTimeout(resolve, 4000)); // 3s animation + 1s transition
         setShowNosferatuCard(true);
         setIsNVitralLeaving(true);
         setTimeout(() => setIsNosferatuFront(true), 800);
 
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        // Cinquième carte (Banana)
+        await new Promise((resolve) => setTimeout(resolve, 4000)); // 3s animation + 1s transition
         setShowBananaCard(true);
         setIsNosferatuLeaving(true);
         setTimeout(() => setIsBananaFront(true), 800);
@@ -205,7 +218,7 @@ function App() {
     };
 
     sequence();
-  }, []); // Ne s'exécute qu'une fois au montage
+  }, [autoplayStarted]);
 
   // Ne rendre le contenu que lorsque les images sont chargées
   if (!imagesLoaded) {

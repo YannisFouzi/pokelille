@@ -114,70 +114,74 @@ const HoloCard = ({
   }, []); // Retour à la dépendance vide
 
   useEffect(() => {
-    // Ne lance l'animation automatique que si autoAnimation est true
     if (!autoAnimation || hasBeenClicked) return;
 
     const timeoutId = setTimeout(() => {
       const card = cardRef.current;
       if (!card || hasBeenClicked) return;
 
+      // 1. D'abord on capture la transformation actuelle
       const computedStyle = window.getComputedStyle(card);
       const matrix = computedStyle.transform;
-      card.style.transform = matrix;
-      card.style.animation = "none";
-      card.classList.remove(`animation-${animationIndex.current}`);
+
+      // 2. On retire la classe animated et on attend une frame
       card.classList.remove("animated");
+
       requestAnimationFrame(() => {
-        card.classList.add("returning");
+        // 3. Maintenant que la transition est réactivée, on applique les changements
+        card.style.transform = matrix;
+        card.style.animation = "none";
+        card.classList.remove(`animation-${animationIndex.current}`);
+
+        requestAnimationFrame(() => {
+          card.classList.add("returning");
+        });
       });
+
       setHasBeenClicked(true);
 
-      // Déclencher automatiquement le second clic après 1 seconde
       setTimeout(() => {
         if (onSecondClick) {
           onSecondClick();
         }
-      }, 1000);
-    }, 2000);
+      }, 2000);
+    }, 3000);
 
     return () => clearTimeout(timeoutId);
   }, [hasBeenClicked, onSecondClick, autoAnimation]);
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log("🖱️ onClick event triggered");
-    console.log("🎯 État hasBeenClicked:", hasBeenClicked);
     e.stopPropagation();
 
     const card = cardRef.current;
-    if (!card) {
-      console.log("❌ Card ref est null");
-      return;
-    }
+    if (!card) return;
 
     if (!hasBeenClicked) {
-      // Premier clic : arrêter l'animation
-      console.log(
-        "✨ Premier clic - Classes avant:",
-        card.classList.toString()
-      );
+      console.log("👆 MANUEL - Classes avant:", card.classList.toString());
+      console.log("👆 MANUEL - Style transform avant:", card.style.transform);
+
       const computedStyle = window.getComputedStyle(card);
       const matrix = computedStyle.transform;
+      console.log("👆 MANUEL - Matrix capturée:", matrix);
+
       card.style.transform = matrix;
       card.style.animation = "none";
       card.classList.remove(`animation-${animationIndex.current}`);
       card.classList.remove("animated");
-      requestAnimationFrame(() => {
-        card.classList.add("returning");
-      });
-      setHasBeenClicked(true);
+
       console.log(
-        "✨ Premier clic - Classes après:",
+        "👆 MANUEL - Classes après remove:",
         card.classList.toString()
       );
+      console.log("👆 MANUEL - Style transform après:", card.style.transform);
+
+      requestAnimationFrame(() => {
+        card.classList.add("returning");
+        console.log("👆 MANUEL - Classes finales:", card.classList.toString());
+      });
+
+      setHasBeenClicked(true);
     } else {
-      // Deuxième clic : déclencher l'animation de sortie
-      console.log("✨ Deuxième clic - Déclencher la sortie");
-      console.log("🎭 onSecondClick est défini ?", !!onSecondClick);
       onSecondClick?.();
     }
   };
