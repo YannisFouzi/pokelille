@@ -199,7 +199,6 @@
 .booster-top {
   top: 0;
   transform-origin: left top;
-  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
   clip-path: polygon(0 0, 100% 0, 100% 20%, 0 20%);
   position: absolute;
   width: 100%;
