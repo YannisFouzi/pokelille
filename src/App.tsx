@@ -105,7 +105,7 @@ function App() {
             onClick={handleTitleClick}
           >
             <h1 className="text-gray-600 text-xl font-normal relative z-10">
-              {isExpanded ? "Choisir celle-ci" : "Choisissez une soirée."}
+              {isExpanded ? "Choisir celle-ci" : "Choisissez une soirée"}
             </h1>
           </div>
         )}
