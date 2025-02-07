@@ -8,7 +8,7 @@
   height: 630px;
   position: relative;
   overflow: hidden;
-  border-radius: 5%/3.5%;
+  border-radius: 6.2%/4.8%;
   box-shadow: -5px -5px 5px -5px var(--color1), 5px 5px 5px -5px var(--color2),
     -7px -7px 10px -5px transparent, 7px 7px 10px -5px transparent,
     0 0 5px 0px rgba(255, 255, 255, 0), 0 55px 35px -20px rgba(0, 0, 0, 0.5);
