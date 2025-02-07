@@ -6,6 +6,7 @@ interface HoloCardProps {
   className?: string;
   onSecondClick?: () => void;
   isFirstCard?: boolean;
+  autoAnimation?: boolean;
 }
 
 const HoloCard = ({
@@ -13,6 +14,7 @@ const HoloCard = ({
   className = "",
   onSecondClick,
   isFirstCard = false,
+  autoAnimation = import.meta.env.VITE_AUTO_ANIMATION === "true",
 }: HoloCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const styleRef = useRef<HTMLStyleElement>(null);
@@ -107,6 +109,36 @@ const HoloCard = ({
 
   // Ajoutons aussi un log dans le return pour voir si le composant se monte correctement
   console.log("🔄 HoloCard render - animationIndex:", animationIndex.current);
+
+  useEffect(() => {
+    // Ne lance l'animation automatique que si autoAnimation est true
+    if (!autoAnimation || hasBeenClicked) return;
+
+    const timeoutId = setTimeout(() => {
+      const card = cardRef.current;
+      if (!card || hasBeenClicked) return;
+
+      const computedStyle = window.getComputedStyle(card);
+      const matrix = computedStyle.transform;
+      card.style.transform = matrix;
+      card.style.animation = "none";
+      card.classList.remove(`animation-${animationIndex.current}`);
+      card.classList.remove("animated");
+      requestAnimationFrame(() => {
+        card.classList.add("returning");
+      });
+      setHasBeenClicked(true);
+
+      // Déclencher automatiquement le second clic après 1 seconde
+      setTimeout(() => {
+        if (onSecondClick) {
+          onSecondClick();
+        }
+      }, 1000);
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [hasBeenClicked, onSecondClick, autoAnimation]);
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
     console.log("🖱️ onClick event triggered");

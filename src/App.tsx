@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import CardParticles from "./components/CardParticles";
 import HoloCard from "./components/HoloCard";
+
+const AUTO_ANIMATION = import.meta.env.VITE_AUTO_ANIMATION === "true";
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -23,6 +25,7 @@ function App() {
   const [showBananaCard, setShowBananaCard] = useState(false);
   const [isBananaFront, setIsBananaFront] = useState(false);
   const [isNosferatuLeaving, setIsNosferatuLeaving] = useState(false);
+  const [autoplayStarted, setAutoplayStarted] = useState(false);
   const boosters = [
     "/image/booster/pokelillev7.png",
     "/image/booster/pokelillev7.png",
@@ -72,11 +75,13 @@ function App() {
     // On attend un peu avant de montrer la carte avec son animation
     setTimeout(() => {
       setShowCard(true);
-      // On déclenche la descente du booster juste après
+      // On déclenche la descente du booster
+      setIsDescending(true);
+
+      // On attend que le booster soit suffisamment descendu avant de mettre la carte au premier plan
       setTimeout(() => {
-        setIsDescending(true);
-        setShowCardFront(true); // On active showCardFront en même temps que la descente
-      }, 200);
+        setShowCardFront(true); // Déplacé dans un nouveau setTimeout
+      }, 1000); // Délai plus long pour laisser le booster descendre
     }, 800);
   };
 
@@ -84,6 +89,76 @@ function App() {
     // Simule le clic sur l'image centrale
     handleImageClick(currentIndex);
   };
+
+  useEffect(() => {
+    // Ne lance la séquence que si AUTO_ANIMATION est true
+    if (!AUTO_ANIMATION || autoplayStarted) return;
+
+    const sequence = async () => {
+      setAutoplayStarted(true);
+
+      // Attendre 1 seconde après le chargement
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Clic à droite
+      nextSlide();
+
+      // Attendre 1 seconde
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Double clic à gauche rapide
+      prevSlide();
+      setTimeout(prevSlide, 100);
+
+      // Attendre 1 seconde
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Clic sur "Choisissez une soirée"
+      setIsExpanded(true);
+
+      // Attendre 1 seconde
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Clic sur "Choisir celle-ci" (déclenche l'ouverture)
+      setIsTearing(true);
+      setShowTitle(false);
+
+      // Attendre que le booster s'ouvre (handleTearEnd s'occupera de la suite)
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // La séquence des cartes commence automatiquement
+      const showNextCard = async () => {
+        // Attendre 3 secondes pour chaque carte
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        setShowCard(true);
+        setShowCardFront(true);
+
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        setShowScoobyCard(true);
+        setIsCardLeaving(true);
+        setTimeout(() => setIsScoobyFront(true), 800);
+
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        setShowNVitralCard(true);
+        setIsScoobyLeaving(true);
+        setTimeout(() => setIsNVitralFront(true), 800);
+
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        setShowNosferatuCard(true);
+        setIsNVitralLeaving(true);
+        setTimeout(() => setIsNosferatuFront(true), 800);
+
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        setShowBananaCard(true);
+        setIsNosferatuLeaving(true);
+        setTimeout(() => setIsBananaFront(true), 800);
+      };
+
+      showNextCard();
+    };
+
+    sequence();
+  }, []); // Ne s'exécute qu'une fois au montage
 
   return (
     <div
