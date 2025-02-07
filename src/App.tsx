@@ -68,8 +68,10 @@ function App() {
   };
 
   const handleTearEnd = () => {
-    // D'abord on montre la carte
-    setShowCard(true);
+    // On attend un peu avant de montrer la carte
+    setTimeout(() => {
+      setShowCard(true);
+    }, 800); // Attendre 800ms avant de montrer la carte
 
     // On attend plus longtemps avant de faire descendre le booster
     setTimeout(() => {
@@ -116,7 +118,7 @@ function App() {
           {/* On n'affiche la carte que si showCard est true */}
           {showCard && (
             <div
-              className={`card-reveal ${showCard ? "visible" : ""} ${
+              className={`card-reveal first-card ${showCard ? "visible" : ""} ${
                 showCardFront ? "booster-down" : ""
               } ${isCardLeaving ? "slide-out" : ""}`}
               style={{ pointerEvents: showCardFront ? "all" : "none" }}

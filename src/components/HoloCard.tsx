@@ -5,12 +5,14 @@ interface HoloCardProps {
   imageUrl: string;
   className?: string;
   onSecondClick?: () => void;
+  isFirstCard?: boolean;
 }
 
 const HoloCard = ({
   imageUrl,
   className = "",
   onSecondClick,
+  isFirstCard = false,
 }: HoloCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const styleRef = useRef<HTMLStyleElement>(null);
@@ -145,7 +147,7 @@ const HoloCard = ({
     <>
       <div
         ref={cardRef}
-        className={`holo-card animated ${className}`}
+        className={`holo-card ${className} ${isFirstCard ? "first-card" : ""}`}
         style={{ backgroundImage: `url(${imageUrl})` }}
         onClick={handleCardClick}
       />
