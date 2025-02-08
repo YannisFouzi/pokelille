@@ -29,8 +29,8 @@ function App() {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const boosters = [
     "/image/booster/pokelillev7.png",
-    "/image/booster/pokelillev7.png",
-    "/image/booster/pokelillev7.png",
+    "/image/booster/pokelille_before.png",
+    "/image/booster/pokelille_euphorie.png",
   ];
   const preloadedImages = new Map();
 
@@ -142,8 +142,8 @@ function App() {
     if (!AUTO_ANIMATION || autoplayStarted) return;
 
     const sequence = async () => {
-      // Délai initial de 2 secondes
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Délai initial de 1.8 secondes
+      await new Promise((resolve) => setTimeout(resolve, 1800));
 
       setAutoplayStarted(true);
 
@@ -159,11 +159,17 @@ function App() {
       // Premier clic à gauche
       prevSlide();
 
-      // Attendre 2 secondes
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Attendre 1 seconde
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Deuxième clic à gauche
       prevSlide();
+
+      // Attendre 0.8 seconde (modifié de 0.5s)
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // Clic à droite
+      nextSlide();
 
       // Attendre 1 seconde
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -171,10 +177,10 @@ function App() {
       // Clic sur "Choisissez une soirée"
       setIsExpanded(true);
 
-      // Attendre 2 secondes (au lieu de 1)
+      // Attendre 2 secondes
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      // Clic sur "Choisir celle-ci" (déclenche l'ouverture)
+      // Clic sur "Choisir celle-ci"
       setIsTearing(true);
       setShowTitle(false);
 
