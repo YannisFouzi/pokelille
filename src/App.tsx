@@ -34,6 +34,13 @@ function App() {
   ];
   const preloadedImages = new Map();
 
+  const cardImages = [
+    "/image/carte/nvitral.png",
+    "/image/carte/nosferatu.png",
+    "/image/carte/nxd.png",
+    "/image/carte/banana.png",
+  ];
+
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === boosters.length - 1 ? 0 : prevIndex + 1
@@ -79,13 +86,6 @@ function App() {
       setImagesLoaded(true);
     });
   }, []);
-
-  const cardImages = [
-    "/image/carte/scooby.png",
-    "/image/carte/nvitral.png",
-    "/image/carte/nosferatu.png",
-    "/image/carte/banana.png",
-  ];
 
   const handleImageClick = (index: number) => {
     let diff = index - currentIndex;
@@ -189,34 +189,32 @@ function App() {
 
       // La séquence des cartes commence automatiquement
       const showNextCard = async () => {
-        // Attendre que la première carte finisse son animation d'apparition (environ 2s)
+        // Première carte (Hysta)
         await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        // Laisser l'animation holographique se jouer pendant 3 secondes + 1 seconde de transition
         await new Promise((resolve) => setTimeout(resolve, 4000));
         setIsCardLeaving(true);
 
-        // Deuxième carte (Scooby)
-        await new Promise((resolve) => setTimeout(resolve, 4000)); // 3s animation + 1s transition
-        setShowScoobyCard(true);
-        setTimeout(() => setIsScoobyFront(true), 800);
-
-        // Troisième carte (N-Vitral)
-        await new Promise((resolve) => setTimeout(resolve, 4000)); // 3s animation + 1s transition
+        // Deuxième carte (N-Vitral)
+        await new Promise((resolve) => setTimeout(resolve, 4000));
         setShowNVitralCard(true);
-        setIsScoobyLeaving(true);
         setTimeout(() => setIsNVitralFront(true), 800);
 
-        // Quatrième carte (Nosferatu)
-        await new Promise((resolve) => setTimeout(resolve, 4000)); // 3s animation + 1s transition
+        // Troisième carte (Nosferatu)
+        await new Promise((resolve) => setTimeout(resolve, 4000));
         setShowNosferatuCard(true);
         setIsNVitralLeaving(true);
         setTimeout(() => setIsNosferatuFront(true), 800);
 
-        // Cinquième carte (Banana)
-        await new Promise((resolve) => setTimeout(resolve, 4000)); // 3s animation + 1s transition
-        setShowBananaCard(true);
+        // Quatrième carte (NXD)
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+        setShowScoobyCard(true);
         setIsNosferatuLeaving(true);
+        setTimeout(() => setIsScoobyFront(true), 800);
+
+        // Cinquième carte (Banana)
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+        setShowBananaCard(true);
+        setIsScoobyLeaving(true);
         setTimeout(() => setIsBananaFront(true), 800);
       };
 
@@ -261,7 +259,7 @@ function App() {
             isExpanded ? "h-[800px]" : "h-[600px]"
           } max-w-3xl mx-auto transition-all duration-500`}
         >
-          {/* On n'affiche la carte que si showCard est true */}
+          {/* Première carte (Hysta) */}
           {showCard && (
             <div
               className={`card-reveal first-card ${showCard ? "visible" : ""} ${
@@ -273,10 +271,10 @@ function App() {
                 imageUrl="/image/carte/hysta.png"
                 className="visible"
                 onSecondClick={() => {
-                  setShowScoobyCard(true);
+                  setShowNVitralCard(true);
                   setIsCardLeaving(true);
                   setTimeout(() => {
-                    setIsScoobyFront(true);
+                    setIsNVitralFront(true);
                   }, 800);
                 }}
                 isFirstCard={true}
@@ -285,33 +283,7 @@ function App() {
             </div>
           )}
 
-          {/* Carte Scooby */}
-          {showScoobyCard && (
-            <div
-              className={`card-reveal ${showScoobyCard ? "visible" : ""} ${
-                isScoobyFront ? "booster-down" : ""
-              } ${isScoobyLeaving ? "slide-out" : ""}`}
-              style={{
-                pointerEvents: isScoobyFront ? "all" : "none",
-                zIndex: isScoobyFront ? 30 : 4, // En dessous de Hysta (z-index: 5) au début
-              }}
-            >
-              <HoloCard
-                imageUrl="/image/carte/scooby.png"
-                className="visible"
-                onSecondClick={() => {
-                  setShowNVitralCard(true);
-                  setIsScoobyLeaving(true);
-
-                  setTimeout(() => {
-                    setIsNVitralFront(true);
-                  }, 800);
-                }}
-              />
-            </div>
-          )}
-
-          {/* Carte N-Vitral */}
+          {/* Deuxième carte (N-Vitral) */}
           {showNVitralCard && (
             <div
               className={`card-reveal ${showNVitralCard ? "visible" : ""} ${
@@ -328,7 +300,6 @@ function App() {
                 onSecondClick={() => {
                   setShowNosferatuCard(true);
                   setIsNVitralLeaving(true);
-
                   setTimeout(() => {
                     setIsNosferatuFront(true);
                   }, 800);
@@ -337,7 +308,7 @@ function App() {
             </div>
           )}
 
-          {/* Carte Nosferatu */}
+          {/* Troisième carte (Nosferatu) */}
           {showNosferatuCard && (
             <div
               className={`card-reveal ${showNosferatuCard ? "visible" : ""} ${
@@ -352,9 +323,33 @@ function App() {
                 imageUrl="/image/carte/nosferatu.png"
                 className="visible"
                 onSecondClick={() => {
-                  setShowBananaCard(true);
+                  setShowScoobyCard(true);
                   setIsNosferatuLeaving(true);
+                  setTimeout(() => {
+                    setIsScoobyFront(true);
+                  }, 800);
+                }}
+              />
+            </div>
+          )}
 
+          {/* Quatrième carte (NXD) - utilise les variables Scooby */}
+          {showScoobyCard && (
+            <div
+              className={`card-reveal ${showScoobyCard ? "visible" : ""} ${
+                isScoobyFront ? "booster-down" : ""
+              } ${isScoobyLeaving ? "slide-out" : ""}`}
+              style={{
+                pointerEvents: isScoobyFront ? "all" : "none",
+                zIndex: isScoobyFront ? 30 : 4, // En dessous de Hysta (z-index: 5) au début
+              }}
+            >
+              <HoloCard
+                imageUrl="/image/carte/nxd.png"
+                className="visible"
+                onSecondClick={() => {
+                  setShowBananaCard(true);
+                  setIsScoobyLeaving(true);
                   setTimeout(() => {
                     setIsBananaFront(true);
                   }, 800);
