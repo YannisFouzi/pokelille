@@ -7,6 +7,7 @@ interface HoloCardProps {
   onSecondClick?: () => void;
   isFirstCard?: boolean;
   autoAnimation?: boolean;
+  disableClick?: boolean;
 }
 
 const HoloCard = ({
@@ -15,6 +16,7 @@ const HoloCard = ({
   onSecondClick,
   isFirstCard = false,
   autoAnimation = import.meta.env.VITE_AUTO_ANIMATION === "true",
+  disableClick = false,
 }: HoloCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const styleRef = useRef<HTMLStyleElement>(null);
@@ -151,6 +153,9 @@ const HoloCard = ({
   }, [hasBeenClicked, onSecondClick, autoAnimation]);
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Si les clics sont désactivés, on ne fait rien
+    if (disableClick) return;
+
     e.stopPropagation();
 
     const card = cardRef.current;
@@ -204,6 +209,7 @@ export default React.memo(HoloCard, (prevProps, nextProps) => {
     prevProps.imageUrl === nextProps.imageUrl &&
     prevProps.className === nextProps.className &&
     prevProps.isFirstCard === nextProps.isFirstCard &&
-    prevProps.autoAnimation === nextProps.autoAnimation
+    prevProps.autoAnimation === nextProps.autoAnimation &&
+    prevProps.disableClick === nextProps.disableClick
   );
 });

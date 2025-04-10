@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import FlipCard from "./components/FlipCard";
 import HoloCard from "./components/HoloCard";
 
-const AUTO_ANIMATION = import.meta.env.VITE_AUTO_ANIMATION === "false";
+const AUTO_ANIMATION = import.meta.env.VITE_AUTO_ANIMATION === "true";
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -77,6 +78,7 @@ function App() {
   useEffect(() => {
     const allImages = [
       "/image/carte/hysta.png",
+      "/image/carte/backside.png",
       ...cardImages,
       "/image/booster/pokelillev7.png",
     ];
@@ -188,33 +190,54 @@ function App() {
 
       // La séquence des cartes commence automatiquement
       const showNextCard = async () => {
-        // Première carte (Hysta)
+        // Première carte (Hysta) - Face arrière
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        await new Promise((resolve) => setTimeout(resolve, 4000));
+
+        // Attendre que la carte se retourne (délai réduit)
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        // Afficher la face avant pendant un temps plus court
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        // Préparer la carte suivante AVANT que la première parte
+        // Pour créer une transition plus fluide
+        setShowNVitralCard(true);
+
+        // Très court délai pour que la carte N-Vitral soit chargée mais pas visible
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // Faire partir la carte Hysta
         setIsCardLeaving(true);
 
-        // Deuxième carte (N-Vitral)
-        await new Promise((resolve) => setTimeout(resolve, 4000));
-        setShowNVitralCard(true);
-        setTimeout(() => setIsNVitralFront(true), 800);
+        // Attendre que la carte commence à partir, mais pas complètement
+        await new Promise((resolve) => setTimeout(resolve, 400));
 
-        // Troisième carte (Nosferatu)
+        // Faire apparaître la carte suivante pendant que Hysta part
+        setIsNVitralFront(true);
+
+        // Troisième carte (Nosferatu) - même principe
         await new Promise((resolve) => setTimeout(resolve, 4000));
         setShowNosferatuCard(true);
+        await new Promise((resolve) => setTimeout(resolve, 100));
         setIsNVitralLeaving(true);
-        setTimeout(() => setIsNosferatuFront(true), 800);
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        setIsNosferatuFront(true);
 
         // Quatrième carte (NXD)
         await new Promise((resolve) => setTimeout(resolve, 4000));
         setShowScoobyCard(true);
+        await new Promise((resolve) => setTimeout(resolve, 100));
         setIsNosferatuLeaving(true);
-        setTimeout(() => setIsScoobyFront(true), 800);
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        setIsScoobyFront(true);
 
         // Cinquième carte (Banana)
         await new Promise((resolve) => setTimeout(resolve, 4000));
         setShowBananaCard(true);
+        await new Promise((resolve) => setTimeout(resolve, 100));
         setIsScoobyLeaving(true);
-        setTimeout(() => setIsBananaFront(true), 800);
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        setIsBananaFront(true);
       };
 
       showNextCard();
@@ -264,19 +287,27 @@ function App() {
               className={`card-reveal first-card ${showCard ? "visible" : ""} ${
                 showCardFront ? "booster-down" : ""
               } ${isCardLeaving ? "slide-out" : ""}`}
-              style={{ pointerEvents: showCardFront ? "all" : "none" }}
+              style={{
+                pointerEvents: showCardFront ? "all" : "none",
+                zIndex: 50, // S'assurer que la carte est au-dessus des autres éléments
+              }}
             >
-              <HoloCard
-                imageUrl="/image/carte/hysta.png"
+              <FlipCard
+                frontImageUrl="/image/carte/hysta.png"
+                backImageUrl="/image/carte/backside.png"
                 className="visible"
                 onSecondClick={() => {
+                  console.log("Second clic sur la carte Hysta détecté!");
                   setShowNVitralCard(true);
                   setIsCardLeaving(true);
                   setTimeout(() => {
                     setIsNVitralFront(true);
                   }, 800);
                 }}
-                isFirstCard={true}
+                onFlipComplete={() => {
+                  console.log("Carte retournée !");
+                }}
+                autoFlip={true}
               />
             </div>
           )}
