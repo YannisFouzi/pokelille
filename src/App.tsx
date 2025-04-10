@@ -223,7 +223,7 @@ function App() {
         await new Promise((resolve) => setTimeout(resolve, 400));
         setIsNosferatuFront(true);
 
-        // Quatrième carte (NXD)
+        // Quatrième carte (NXD) - carte finale maintenant
         await new Promise((resolve) => setTimeout(resolve, 4000));
         setShowScoobyCard(true);
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -231,13 +231,8 @@ function App() {
         await new Promise((resolve) => setTimeout(resolve, 400));
         setIsScoobyFront(true);
 
-        // Cinquième carte (Banana)
-        await new Promise((resolve) => setTimeout(resolve, 4000));
-        setShowBananaCard(true);
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        setIsScoobyLeaving(true);
-        await new Promise((resolve) => setTimeout(resolve, 400));
-        setIsBananaFront(true);
+        // On ne fait plus partir la carte NXD et on ne montre plus Banana
+        // La carte NXD reste affichée comme dernière carte
       };
 
       showNextCard();
@@ -362,7 +357,7 @@ function App() {
             </div>
           )}
 
-          {/* Quatrième carte (NXD) - utilise les variables Scooby */}
+          {/* Quatrième carte (NXD) - dernière carte maintenant */}
           {showScoobyCard && (
             <div
               className={`card-reveal ${showScoobyCard ? "visible" : ""} ${
@@ -370,38 +365,10 @@ function App() {
               } ${isScoobyLeaving ? "slide-out" : ""}`}
               style={{
                 pointerEvents: isScoobyFront ? "all" : "none",
-                zIndex: isScoobyFront ? 30 : 4, // En dessous de Hysta (z-index: 5) au début
+                zIndex: isScoobyFront ? 30 : 4,
               }}
             >
-              <HoloCard
-                imageUrl="/image/carte/nxd2.png"
-                className="visible"
-                onSecondClick={() => {
-                  setShowBananaCard(true);
-                  setIsScoobyLeaving(true);
-                  setTimeout(() => {
-                    setIsBananaFront(true);
-                  }, 800);
-                }}
-              />
-            </div>
-          )}
-
-          {/* Carte Banana */}
-          {showBananaCard && (
-            <div
-              className={`card-reveal ${showBananaCard ? "visible" : ""} ${
-                isBananaFront ? "booster-down" : ""
-              }`}
-              style={{
-                pointerEvents: isBananaFront ? "all" : "none",
-                zIndex: isBananaFront ? 30 : 4,
-              }}
-            >
-              <HoloCard
-                imageUrl="/image/carte/banana.png"
-                className="visible"
-              />
+              <HoloCard imageUrl="/image/carte/nxd2.png" className="visible" />
             </div>
           )}
 
