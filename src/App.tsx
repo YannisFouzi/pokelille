@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import CardParticles from "./components/CardParticles";
 import HoloCard from "./components/HoloCard";
 
-const AUTO_ANIMATION = import.meta.env.VITE_AUTO_ANIMATION === "true";
+const AUTO_ANIMATION = import.meta.env.VITE_AUTO_ANIMATION === "false";
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -37,7 +36,7 @@ function App() {
   const cardImages = [
     "/image/carte/nvitral.png",
     "/image/carte/nosferatu.png",
-    "/image/carte/nxd.png",
+    "/image/carte/nxd2.png",
     "/image/carte/banana.png",
   ];
 
@@ -279,7 +278,6 @@ function App() {
                 }}
                 isFirstCard={true}
               />
-              {showCardFront && !isCardLeaving && <CardParticles />}
             </div>
           )}
 
@@ -345,7 +343,7 @@ function App() {
               }}
             >
               <HoloCard
-                imageUrl="/image/carte/nxd.png"
+                imageUrl="/image/carte/nxd2.png"
                 className="visible"
                 onSecondClick={() => {
                   setShowBananaCard(true);
