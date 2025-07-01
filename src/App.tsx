@@ -38,7 +38,7 @@ function App() {
     "/image/carte/nvitral.png",
     "/image/carte/nosferatu.png",
     "/image/carte/nxd2.png",
-    "/image/carte/banana.png",
+    "/image/carte/Banana_Smoothie_Card.png",
   ];
 
   const nextSlide = () => {
@@ -231,8 +231,15 @@ function App() {
         await new Promise((resolve) => setTimeout(resolve, 400));
         setIsScoobyFront(true);
 
-        // On ne fait plus partir la carte NXD et on ne montre plus Banana
-        // La carte NXD reste affichée comme dernière carte
+        // Cinquième carte (Banana Smoothie) - carte finale
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+        setShowBananaCard(true);
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        setIsScoobyLeaving(true);
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        setIsBananaFront(true);
+
+        // On ne fait plus partir la carte Banana et elle reste affichée comme dernière carte
       };
 
       showNextCard();
@@ -368,7 +375,35 @@ function App() {
                 zIndex: isScoobyFront ? 30 : 4,
               }}
             >
-              <HoloCard imageUrl="/image/carte/nxd2.png" className="visible" />
+              <HoloCard
+                imageUrl="/image/carte/nxd2.png"
+                className="visible"
+                onSecondClick={() => {
+                  setShowBananaCard(true);
+                  setIsScoobyLeaving(true);
+                  setTimeout(() => {
+                    setIsBananaFront(true);
+                  }, 800);
+                }}
+              />
+            </div>
+          )}
+
+          {/* Cinquième carte (Banana Smoothie) - dernière carte */}
+          {showBananaCard && (
+            <div
+              className={`card-reveal ${showBananaCard ? "visible" : ""} ${
+                isBananaFront ? "booster-down" : ""
+              }`}
+              style={{
+                pointerEvents: isBananaFront ? "all" : "none",
+                zIndex: isBananaFront ? 30 : 4,
+              }}
+            >
+              <HoloCard
+                imageUrl="/image/carte/Banana_Smoothie_Card.png"
+                className="visible"
+              />
             </div>
           )}
 
