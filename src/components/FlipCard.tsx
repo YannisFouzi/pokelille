@@ -9,6 +9,7 @@ interface FlipCardProps {
   onFlipComplete?: () => void;
   onSecondClick?: () => void;
   autoFlip?: boolean;
+  disableClick?: boolean;
 }
 
 const FlipCard = ({
@@ -18,6 +19,7 @@ const FlipCard = ({
   onFlipComplete,
   onSecondClick,
   autoFlip = true,
+  disableClick = false,
 }: FlipCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [hasFlipped, setHasFlipped] = useState(false);
@@ -45,6 +47,9 @@ const FlipCard = ({
   }, [autoFlip, hasFlipped, onFlipComplete]);
 
   const handleCardClick = () => {
+    // Si les clics sont désactivés, on ne fait rien
+    if (disableClick) return;
+
     if (!hasFlipped) {
       // Premier clic, on retourne la carte
       setIsFlipped(true);
@@ -62,6 +67,9 @@ const FlipCard = ({
 
   // Fonction spécifique pour gérer les clics sur la face avant
   const handleFrontClick = (e: React.MouseEvent) => {
+    // Si les clics sont désactivés, on ne fait rien
+    if (disableClick) return;
+
     e.stopPropagation(); // Empêcher la propagation pour éviter de déclencher handleCardClick également
 
     if (hasFlipped && onSecondClick) {
@@ -86,8 +94,7 @@ const FlipCard = ({
             imageUrl={frontImageUrl}
             className="visible"
             isFirstCard={true}
-            // On désactive le comportement de clic du HoloCard car on gère les clics nous-mêmes
-            disableClick={true}
+            disableClick={disableClick}
           />
         </div>
       </div>

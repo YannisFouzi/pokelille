@@ -89,6 +89,11 @@ function App() {
   }, []);
 
   const handleImageClick = (index: number) => {
+    // En mode auto, désactiver toutes les interactions utilisateur
+    if (AUTO_ANIMATION && autoplayStarted) {
+      return;
+    }
+
     let diff = index - currentIndex;
     if (diff < 0) diff += boosters.length;
 
@@ -134,6 +139,11 @@ function App() {
   };
 
   const handleTitleClick = () => {
+    // En mode auto, désactiver toutes les interactions utilisateur
+    if (AUTO_ANIMATION && autoplayStarted) {
+      return;
+    }
+
     // Simule le clic sur l'image centrale
     handleImageClick(currentIndex);
   };
@@ -271,6 +281,10 @@ function App() {
           <div
             className={`season-title shadow-sm ${isExpanded ? "selected" : ""}`}
             onClick={handleTitleClick}
+            style={{
+              pointerEvents:
+                AUTO_ANIMATION && autoplayStarted ? "none" : "auto",
+            }}
           >
             <h1 className="text-gray-600 text-xl font-normal relative z-10">
               {isExpanded ? "Choisir celle-ci" : "Choisissez une soirée"}
@@ -310,6 +324,7 @@ function App() {
                   console.log("Carte retournée !");
                 }}
                 autoFlip={true}
+                disableClick={AUTO_ANIMATION && autoplayStarted}
               />
             </div>
           )}
@@ -335,6 +350,7 @@ function App() {
                     setIsNosferatuFront(true);
                   }, 800);
                 }}
+                disableClick={AUTO_ANIMATION && autoplayStarted}
               />
             </div>
           )}
@@ -360,6 +376,7 @@ function App() {
                     setIsScoobyFront(true);
                   }, 800);
                 }}
+                disableClick={AUTO_ANIMATION && autoplayStarted}
               />
             </div>
           )}
@@ -385,6 +402,7 @@ function App() {
                     setIsBananaFront(true);
                   }, 800);
                 }}
+                disableClick={AUTO_ANIMATION && autoplayStarted}
               />
             </div>
           )}
@@ -403,6 +421,7 @@ function App() {
               <HoloCard
                 imageUrl="/image/carte/Banana_Smoothie_Card.png"
                 className="visible"
+                disableClick={AUTO_ANIMATION && autoplayStarted}
               />
             </div>
           )}
@@ -430,6 +449,10 @@ function App() {
                           : "-translate-x-[110%]"
                       } hover:opacity-80`
                 }`}
+                style={{
+                  pointerEvents:
+                    AUTO_ANIMATION && autoplayStarted ? "none" : "auto",
+                }}
               >
                 <div className="relative">
                   {position === 0 ? (
